@@ -21,3 +21,5 @@ let handleResponse = data => {
         "update": data
     });
 }
+
+https.createServer.listen(process.env.PORT || 8080)
