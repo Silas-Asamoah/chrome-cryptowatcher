@@ -14,3 +14,10 @@ setInterval(() => {
         .on('error', e => console.error(e.message))
     })
 }, 10000)
+
+//Defining handleResponse
+let handleResponse = data => {
+    pusher.trigger('cryptowatcher', 'prices', {
+        "update": data
+    });
+}
