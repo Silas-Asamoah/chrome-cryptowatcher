@@ -3,6 +3,7 @@
 const Pusher = require('pusher')
 const https = require('https');
 const config = require('./config')
+const cryptos = require('./cryptos.json')
 const pusher = new Pusher(config)
 
 //Calling the Cryptocompare API
