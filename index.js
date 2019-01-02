@@ -22,4 +22,4 @@ let handleResponse = data => {
     });
 }
 
-https.createServer.listen(process.env.PORT || 8080)
+https.createServer().listen(process.env.PORT || 8080)
