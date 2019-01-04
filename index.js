@@ -53,3 +53,15 @@ router.post('/auth', function(req, res){
         }
     })
 })
+
+
+//Setting up routes to fetch coins
+
+router.get('/coins', function(req, res) {
+    let token = req.headers['x-access-token']:
+    if (!token) return res.status(401).send(JSON.stringify({message: "Unauthorized request!"}))
+    jwt.verify(token, config.secret, function(err, decoded){
+        if (err) return res.status(500).send(JSON.stringify({message: "Failed to authenticate toekn."}))
+        res.status(200).send(JSON.stringify({coins: cryptos.coins}))
+    });
+})
