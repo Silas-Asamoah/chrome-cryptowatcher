@@ -16,3 +16,13 @@ const router = express.Router()
 
 router.use(bodyParser.urlencoded({extended: false}));
 router.use(bodyParser.json());
+
+const { allowCrossDomain, fetchCoins, handleResponse, handleFavoriteResponse, generateUrl} = helpers
+app.use(allowCrossDomain)
+
+const defaultUrl = generateUrl(cryptos.coins,cryptos.currencies)
+fetchCoins(defaultUrl, handleResponse)
+
+//Defining Routes
+app.use(router)
+app.listen(process.env.PORT || 4003)
