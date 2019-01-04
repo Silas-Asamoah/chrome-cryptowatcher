@@ -26,3 +26,30 @@ fetchCoins(defaultUrl, handleResponse)
 //Defining Routes
 app.use(router)
 app.listen(process.env.PORT || 4003)
+
+router.post('/auth', function(req, res){
+    db.selectByEmail(req.body.email, (err, user) => {
+        if (err) return res.status(500).send(JSON.stringify({ message: "There was a problem getting user"}))
+        if (user) {
+            if(!bcrypt.compareSync(req.body.password, user.user_pass)) {
+                return res.status(400).send(JSON.stringify({message: "The email or passowrd is incorrect"}))
+            }
+
+            let token = jwt.sign({id: user.id}, config.secret, {
+                expiresIn: 86400 //expires in 24 hours
+            })
+            res.status(200).send(JSON.stringify({toekn: token, user_id: user.id}))
+        } else {
+            db.insertUser([req.body.email, bcrypt.hashSync(req.body.password, 8)],
+            function (err, id) {
+                if (err) return res.status(500).send(JSON.stringify({message: "There was a problem getting user"}))
+                else {
+                    let token = jwt.sign({ id: id}, config.secret, {
+                        expiresIn: 86400
+                    });
+                    res.status(200).send(JSON.stringify({token: token, user_id:id}))
+                }
+            });
+        }
+    })
+})
