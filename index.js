@@ -58,10 +58,23 @@ router.post('/auth', function(req, res){
 //Setting up routes to fetch coins
 
 router.get('/coins', function(req, res) {
-    let token = req.headers['x-access-token']:
+    let token = req.headers['x-access-token'];
     if (!token) return res.status(401).send(JSON.stringify({message: "Unauthorized request!"}))
     jwt.verify(token, config.secret, function(err, decoded){
         if (err) return res.status(500).send(JSON.stringify({message: "Failed to authenticate toekn."}))
         res.status(200).send(JSON.stringify({coins: cryptos.coins}))
+    });
+})
+
+
+//Setting up routes to add favorite coins
+router.post('/favorite/add', function(req, res) {
+    let token = req.headers['x-access-token'];
+    jwt.verify(token, config.secret, function(err, decoded) {
+        if (err) return res.status(401).send(JSON.stringify({message: "Unauthorized request!"}))
+        db.insertFavorite([req.body.coin, decoded.id], (err, favs) => {
+        if (err) return res.status(500).send(JSON.stringify({message: "There was a problem adding your favs"}))
+        res.status(200).send(JSON.stringify({message: "Coin added to your favorites"}))
+        })
     });
 })
