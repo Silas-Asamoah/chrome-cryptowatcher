@@ -23,3 +23,16 @@ let fetchCoins = (url, handler, event=false) => {
 
     }, 1000)
 }
+
+//Response Handlers
+let handleResponse = (data) => {
+    pusher.trigger('cryptowatch', 'prices', {
+        "update":data
+    });
+}
+
+let handleFavoriteResponse = (data, event) => {
+    pusher.trigger('cryptowatch', event, {
+        "update":data
+    });
+}
