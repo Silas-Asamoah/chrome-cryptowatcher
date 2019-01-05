@@ -1,7 +1,7 @@
-const pusher = new Pusher('35d2b602fcec5b9c8edf', {
-    cluster: 'eu',
-    encrypted: true
-  });
+    const pusher = new Pusher('35d2b602fcec5b9c8edf', {
+        cluster: 'eu',
+        encrypted: true
+    });
   
   function handleBinding(event){
     let channel = pusher.subscribe('cryptowatch');
