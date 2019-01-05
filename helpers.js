@@ -12,3 +12,14 @@ const allowCrossDomain = (req, res, next) => {
     res.header('Access-Control-Allow-Headers', '*')
     next();
 }
+
+let fetchCoins = (url, handler, event=false) => {
+    setInterval(() => {
+        https.get(url, response => {
+            response.setEncoding('utf8')
+            .on('data', data => event? handler(Data, event) : handler(data))
+            .on('error', e => console.error(e.message))
+        })
+
+    }, 1000)
+}
