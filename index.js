@@ -78,3 +78,28 @@ router.post('/favorite/add', function(req, res) {
         })
     });
 })
+
+
+//Setting up routes to fetch favorite coins
+router.get('/favorite',  function(req, res) {
+    let token = req.headers['x-access-token'];
+    jwt.verify(token, config.secret, function(err, decoded) {
+        if (err) return res.status(401).send(JSON.stringify({message: "Unauthorized request"}))
+        db.selectFavorite(decoded.id, (err, favs) => {
+            //Favs are used to returned by the database manager
+            if (err) return res,status(500).send(JSON.stringify({message: "There was a problem getting your favs"}))
+            let coins = []
+            if (favs && favs.length > 0) {
+                favs.forEach(fav => coins.push(fav.coin))
+                const url = generateUrl(coins, cryptos.currencies)
+                const event = `users${decoded.id}`
+                fetchCoins(url, handleFavoriteResponse, event)
+                res.status(200).send(JSON.stringify({event: event}))
+            } else{
+                res.status(200).send(JSON.stringify({message: "You do not have any favs"}))
+            }
+
+        });
+
+    });
+})
