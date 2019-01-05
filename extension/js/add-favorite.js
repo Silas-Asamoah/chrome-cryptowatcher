@@ -19,5 +19,30 @@ window.addEventListener('load', function(evt) {
       }
     }
     // Form submission
+
+
+  document.getElementById('form').addEventListener('submit', function(e) {
+    e.preventDefault()
+    getToken(result => {
+      let options = {
+        method : "POST",
+        body : JSON.stringify({coin : this.elements.coin.value}),
+        headers : new Headers({
+          'content-type': 'application/json',
+          'x-access-token' : result.token
+        })
+      }
+      fetch('http://localhost:4003/favorite/add',options)
+      .then(res => {
+        if(res.ok) return res.json()
+        else throw new Error(res.status)
+      })
+      .then(data => {
+        window.location = "/favorite.html"
+      })
+      .catch(error => console.log(error))
+    })
   })
   
+  })
+
