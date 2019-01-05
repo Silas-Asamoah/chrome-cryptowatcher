@@ -21,3 +21,20 @@ const pusher = new Pusher('35d2b602fcec5b9c8edf', {
        document.getElementById('crypto-prices').innerHTML = priceLists
     });
   }
+
+
+  window.addEventListener('load', function(evt) {
+    let xhr = new XMLHttpRequest();
+    getToken(function(result) {
+      xhr.open("GET", 'http://localhost:4003/favorite', true);
+      xhr.setRequestHeader('x-access-token',result.token)
+      xhr.send();
+    })
+    xhr.onreadystatechange = function() {
+      if (xhr.readyState == 4) {
+        let res = JSON.parse(xhr.responseText)
+        if(res.event) handleBinding(res.event)
+        else document.getElementById('crypto-prices').innerHTML = res.message
+      }
+    }
+  })
