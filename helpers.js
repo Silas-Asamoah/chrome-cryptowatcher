@@ -36,3 +36,15 @@ let handleFavoriteResponse = (data, event) => {
         "update":data
     });
 }
+
+let generateUrl = (coins, currencies) => {
+    return `https://min-api.cryptocompare.com/data/pricemulti?fsyms=${coins.join()}&tsyms=${currencies.join()}`
+}
+
+module.exports = {
+    allowCrossDomain: allowCrossDomain,
+    fetchCoins: fetchCoins,
+    handleResponse: handleResponse,
+    handleFavoriteResponse: handleFavoriteResponse,
+    generateUrl: generateUrl
+}
